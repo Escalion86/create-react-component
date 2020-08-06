@@ -31,7 +31,7 @@ function activate(context) {
 
 				const contentIndex = 
 				`import ${componentName} from './${componentName2}';\nexport default ${componentName};`;
-				const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentName2}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		<div>\n\n		</div>\n	}\n}`;
+				const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentName2}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
 				
 				const componentPath = `src/components/${componentName2}`;
 				const folderPath = path.join(
