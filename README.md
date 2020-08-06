@@ -1,6 +1,7 @@
-# create-react-component README
+# Create React component
 
 Create React component in 'src/component/' directory.
+
 Component include:
 - {componentName}.js
 - {componentName}.css
