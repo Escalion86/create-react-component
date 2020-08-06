@@ -18,13 +18,21 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand('create-react-component.createreactcomponent', 
 		function () {
 			vscode.window.showInputBox({
-				placeHolder: 'Введите название компонента разделяя слова пробелом'
+				placeHolder: 'Введите название компонента на латинице разделяя слова пробелом'
 			}).then((input) => {
 				console.log('Введено пользователем: ' + input);
+				const splitedInput = input.toLowerCase().split(' ');
+				let componentName = '';
+				splitedInput.forEach(word => {
+					componentName += word[0].toUpperCase() + word.slice(1);
+				});
+				const componentName2 = componentName[0].toLowerCase() + componentName.slice(1);
+				console.log('Установлено имя компонента как: ' + componentName);
+
 				const contentIndex = 
-				`import ${input} from './${input}';\nexport default ${input};`;
-				const contentComponent = `import React, {Component} from 'react';\n\nimport './${input}.css';\n\nexport default class ${input} extends Component {\n\n	constructor(props) {\n\n	}\n\n	render() {\n\n	}\n}`;
-				const componentPath = `src/component/${input}`;
+				`import ${componentName} from './${componentName2}';\nexport default ${componentName};`;
+				const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentName2}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		<div>\n\n		</div>\n	}\n}`;
+				const componentPath = `src/component/${componentName2}`;
 				const folderPath = path.join(
 					vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1],
 					componentPath);
@@ -35,14 +43,14 @@ function activate(context) {
 
 				console.log('Создана директория');
 
-				fs.writeFile(path.join(folderPath, `${input}.js`), contentComponent, err => {
+				fs.writeFile(path.join(folderPath, `${componentName2}.js`), contentComponent, err => {
 					if (err) {
 						console.error(err);
 						return vscode.window.showErrorMessage("Failed to create React component");
 					}
 					//vscode.window.showInformationMessage(`React component created`);
 				});
-			    fs.writeFile(path.join(folderPath, `${input}.css`), '', err => {
+			    fs.writeFile(path.join(folderPath, `${componentName2}.css`), '', err => {
 					if (err) {
 						console.error(err);
 						return vscode.window.showErrorMessage("Failed to create React component");
