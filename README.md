@@ -2,7 +2,7 @@
 
 Create React component in 'src/component/' directory.
 
-Component include:
+New component include:
 - {componentName}.js
 - {componentName}.css
 - index.js
@@ -14,6 +14,7 @@ No validation name
 ### 0.2.1
 
 Update README
+
 Add Icon
 
 ### 0.2.0
