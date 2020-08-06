@@ -1,6 +1,6 @@
 # Create React component
 
-Create React component in 'src/component/' directory.
+Create React component in 'src/components/' directory.
 
 New component include:
 - {componentName}.js
@@ -10,6 +10,10 @@ New component include:
 ## Known Issues
 
 No validation name
+
+### 0.2.2
+
+Fix path from 'src/component/' to 'src/components/'
 
 ### 0.2.1
 
