@@ -11,6 +11,10 @@ New component include:
 
 No validation name
 
+### 0.2.3
+
+Fixed code when creating files
+
 ### 0.2.2
 
 Fix path from 'src/component/' to 'src/components/'
