@@ -11,6 +11,11 @@ Component include:
 
 No validation name
 
+### 0.2.1
+
+Update README
+Add Icon
+
 ### 0.2.0
 
 Add component name and path generator if component name include more than one words
