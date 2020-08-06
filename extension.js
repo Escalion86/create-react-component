@@ -32,6 +32,7 @@ function activate(context) {
 				const contentIndex = 
 				`import ${componentName} from './${componentName2}';\nexport default ${componentName};`;
 				const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentName2}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		<div>\n\n		</div>\n	}\n}`;
+				
 				const componentPath = `src/component/${componentName2}`;
 				const folderPath = path.join(
 					vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1],
