@@ -1,15 +1,23 @@
 # Create React component
 
-Create React component in 'src/components/' directory.
+ Create React component in chosen in explorer path or in default 'src/components/' directory
 
 New component include:
-- {componentName}.js
-- {componentName}.css
-- index.js
+- path \\ {componentName} \\ {componentName}.js (React file)
+- path \\ {componentName} \\ {componentName}.css (empty file)
+- path \\ {componentName} \ index.js (React with connection)
+
+To use component you just need to type like this:
+
+`import {ComponentName} from './path/{componentName}';`
 
 ## Known Issues
 
 No validation name
+
+### 0.3.0
+
+Add command in explorer context menu
 
 ### 0.2.3
 
