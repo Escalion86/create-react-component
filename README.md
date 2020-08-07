@@ -3,9 +3,9 @@
  Create React component in chosen in explorer path or in default 'src/components/' directory
 
 New component include:
-- path \\ {componentName} \\ {componentName}.js (React file)
+- path \\ {componentName} \\ {componentName}.js (React file with import {componentName}.css)
+- path \\ {componentName} \ index.js (React with import {componentName}.js)
 - path \\ {componentName} \\ {componentName}.css (empty file)
-- path \\ {componentName} \ index.js (React with connection)
 
 To use component you just need to type like this:
 
