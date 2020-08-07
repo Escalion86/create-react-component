@@ -11,9 +11,10 @@ To use component you just need to type like this:
 
 `import {ComponentName} from './path/{componentName}';`
 
-## Known Issues
+### 0.3.1
 
-No validation name
+Added check for correct component name
+All extension code in Latin now
 
 ### 0.3.0
 
@@ -21,11 +22,11 @@ Add command in explorer context menu
 
 ### 0.2.3
 
-Fixed code when creating files
+Fixed code for creating files
 
 ### 0.2.2
 
-Fix path from 'src/component/' to 'src/components/'
+Fix default path from 'src/component/' to 'src/components/'
 
 ### 0.2.1
 
