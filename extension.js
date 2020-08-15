@@ -12,39 +12,49 @@ function firstSymbolIsLetter(str) {
 }
 
 let json = null;
-let defaultDir = 'src/components';
+let defaultDir = 'src/components',
+	addCSS = true,
+	addConstructor = false;
 const projectDir = vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1];
 
-fs.readFile(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8', function(err, contents) {
+fs.readFile(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8', 
+function(err, contents) {
 	if (err !== null) {
 		return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
 	} else {
-		json = JSON.parse(contents);
+		jsonParse(JSON.parse(contents));
 	}					
 });
 
-if (json !== null) {
-	defaultDir = json.defaultDir;
-};
+function jsonParse(json) {
+	defaultDir = json.defaultDir || 'src/components';
+	addCSS = (json.addCSS != undefined) ? json.addCSS : true;
+	addConstructor = (json.addConstructor != undefined) ? json.addConstructor : false;
+}
 
 function createComponent(dir) {
 	vscode.window.showInputBox({
 		placeHolder: 'Enter the name of the component in Latin, separating the words with a space'
 	}).then((input) => {
+
 		if (!firstSymbolIsLetter(input)) {
 			vscode.window.showErrorMessage(`Wrong component name. Component name must start with a letter`);
 		} else {
-		
+
 			const splitedInput = input.toLowerCase().split(' ');
 			let componentName = '';
 			splitedInput.forEach(word => {
 				componentName += word[0].toUpperCase() + word.slice(1);
 			});
+
 			const componentDirName = componentName[0].toLowerCase() + componentName.slice(1);
 
+			const CSSCommand = addCSS ? `import './${componentDirName}.css';\n\n` : '';
+			const constructorCommand = addConstructor ? `	constructor(props) {\n		super(props);\n	}\n\n` : '';
+			
 			const contentIndex = 
 			`import ${componentName} from './${componentDirName}';\nexport default ${componentName};`;
-			const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentDirName}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
+			const contentComponent = `import React, {Component} from 'react';\n\n${CSSCommand}export default class ${componentName} extends Component {\n${constructorCommand}	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
 			
 			const componentPath = `${dir}\\${componentDirName}`;
 
@@ -57,12 +67,14 @@ function createComponent(dir) {
 				}
 				//vscode.window.showInformationMessage(`React component created`);
 			});
-			fs.writeFile(path.join(componentPath, `${componentDirName}.css`), '', err => {
-				if (err) {
-					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
-				}
-				//vscode.window.showInformationMessage(`React component created`);
-			});
+			if (addCSS) {
+				fs.writeFile(path.join(componentPath, `${componentDirName}.css`), '', err => {
+					if (err) {
+						return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
+					}
+					//vscode.window.showInformationMessage(`React component created`);
+				});
+			}
 			fs.writeFile(path.join(componentPath, `index.js`), contentIndex, err => {
 				if (err) {
 					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
