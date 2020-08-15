@@ -11,85 +11,124 @@ function firstSymbolIsLetter(str) {
 	return str[0].match(/[a-zA-Z]/i);
 }
 
+let json = null;
+let defaultDir = 'src/components';
+const projectDir = vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1];
+
+fs.readFile(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8', function(err, contents) {
+	if (err !== null) {
+		return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
+	} else {
+		json = JSON.parse(contents);
+	}					
+});
+
+if (json !== null) {
+	defaultDir = json.defaultDir;
+};
+
+function createComponent(dir) {
+	vscode.window.showInputBox({
+		placeHolder: 'Enter the name of the component in Latin, separating the words with a space'
+	}).then((input) => {
+		if (!firstSymbolIsLetter(input)) {
+			vscode.window.showErrorMessage(`Wrong component name. Component name must start with a letter`);
+		} else {
+		
+			const splitedInput = input.toLowerCase().split(' ');
+			let componentName = '';
+			splitedInput.forEach(word => {
+				componentName += word[0].toUpperCase() + word.slice(1);
+			});
+			const componentDirName = componentName[0].toLowerCase() + componentName.slice(1);
+
+			const contentIndex = 
+			`import ${componentName} from './${componentDirName}';\nexport default ${componentName};`;
+			const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentDirName}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
+			
+			const componentPath = `${dir}\\${componentDirName}`;
+
+			fs.mkdirSync(componentPath, { recursive: true });
+
+			fs.writeFile(path.join(componentPath, `${componentDirName}.js`), contentComponent, err => {
+				if (err) {
+					console.error(err);
+					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
+				}
+				//vscode.window.showInformationMessage(`React component created`);
+			});
+			fs.writeFile(path.join(componentPath, `${componentDirName}.css`), '', err => {
+				if (err) {
+					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
+				}
+				//vscode.window.showInformationMessage(`React component created`);
+			});
+			fs.writeFile(path.join(componentPath, `index.js`), contentIndex, err => {
+				if (err) {
+					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
+				}
+				//vscode.window.showInformationMessage(`React component created`);
+			});
+			
+			vscode.window.showInformationMessage(`React component "${input}" created in ${componentPath}`);
+		}
+	});
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+	const commandCreate = 'create-react-component.create',
+		  commandCreateHere = 'create-react-component.createhere';
 
+	const createDefault = () => {
+		let dir = path.join(projectDir, defaultDir);
+		createComponent(dir);
+	}
+
+	const createHere = (e) => {
+		let dir;
+		if (e != undefined) {
+			if (fs.lstatSync(e.fsPath).isDirectory()) {
+				dir = e.fsPath + '\\';
+			} else {
+				dir = path.dirname(e.fsPath);
+			}
+		} else {
+			return vscode.window.showErrorMessage(`Failed to create React component. Directory did't chosen`);
+			//dir = path.join(projectDir, defaultDir);
+		}
+		createComponent(dir);
+	}
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commandCreate, createDefault)
+	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commandCreateHere, createHere)
+	);
+	
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('create-react-component.createreactcomponent', 
-		function (e) {
-			//Выбран ли путь
-			let dir;
-			if (e != undefined) {
-				if (fs.lstatSync(e.fsPath).isDirectory()) {
-					dir = e.fsPath + '\\';
-				} else {
-					dir = path.dirname(e.fsPath);
-				}
-			} else {
-				dir = path.join(
-					vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1], 
-					'src/components');
-			}
+	// let create = vscode.commands.registerCommand('create-react-component.create', 
+	// 	function (e) {
+	// 		let dir;
+	// 		if (e != undefined) {
+	// 			if (fs.lstatSync(e.fsPath).isDirectory()) {
+	// 				dir = e.fsPath + '\\';
+	// 			} else {
+	// 				dir = path.dirname(e.fsPath);
+	// 			}
+	// 		} else {
+	// 			dir = path.join(projectDir, defaultDir);
+	// 		}
+	// 		createComponent(dir);
+	// 	}
+	// );
 
-			vscode.window.showInputBox({
-				placeHolder: 'Enter the name of the component in Latin, separating the words with a space'
-			}).then((input) => {
-				console.log('User input: ' + input);
-
-				if (!firstSymbolIsLetter(input)) {
-					vscode.window.showErrorMessage(`Wrong component name. Component name must start with a letter`);
-				} else {
-				
-					const splitedInput = input.toLowerCase().split(' ');
-					let componentName = '';
-					splitedInput.forEach(word => {
-						componentName += word[0].toUpperCase() + word.slice(1);
-					});
-					const componentDirName = componentName[0].toLowerCase() + componentName.slice(1);
-					console.log('Component name: ' + componentName);
-
-					const contentIndex = 
-					`import ${componentName} from './${componentDirName}';\nexport default ${componentName};`;
-					const contentComponent = `import React, {Component} from 'react';\n\nimport './${componentDirName}.css';\n\nexport default class ${componentName} extends Component {\n	constructor(props) {\n		super(props);\n	}\n\n	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
-					
-					const componentPath = `${dir}\\${componentDirName}`;
-
-					fs.mkdirSync(componentPath, { recursive: true });
-
-					console.log('Directory created');
-
-					fs.writeFile(path.join(componentPath, `${componentDirName}.js`), contentComponent, err => {
-						if (err) {
-							console.error(err);
-							return vscode.window.showErrorMessage("Failed to create React component");
-						}
-						//vscode.window.showInformationMessage(`React component created`);
-					});
-					fs.writeFile(path.join(componentPath, `${componentDirName}.css`), '', err => {
-						if (err) {
-							console.error(err);
-							return vscode.window.showErrorMessage("Failed to create React component");
-						}
-						//vscode.window.showInformationMessage(`React component created`);
-					});
-					fs.writeFile(path.join(componentPath, `index.js`), contentIndex, err => {
-						if (err) {
-							console.error(err);
-							return vscode.window.showErrorMessage("Failed to create React component");
-						}
-						//vscode.window.showInformationMessage(`React component created`);
-					});
-					vscode.window.showInformationMessage(`React component "${input}" created in ${componentPath}`);
-					console.log('Component files created!');
-				}
-			});
-	});
-
-	context.subscriptions.push(disposable);
+	// context.subscriptions.push(create);
 }
 exports.activate = activate;
 

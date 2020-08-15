@@ -1,6 +1,6 @@
 # Create React component
 
- Create React component in chosen in explorer path or in default 'src/components/' directory
+ Create React component in chosen in explorer path or default directory
 
 New component include:
 - path \\ {componentName} \\ {componentName}.js (React file with import {componentName}.css)
@@ -10,6 +10,11 @@ New component include:
 To use component you just need to type like this:
 
 `import {ComponentName} from './path/{componentName}';`
+
+### 0.4.0
+
+Added option in explorer to create component in chosen directory or default directory
+Added support to config file .vscode/create-react-component.json
 
 ### 0.3.1
 
