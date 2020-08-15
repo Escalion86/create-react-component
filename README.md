@@ -11,6 +11,10 @@ To use component you just need to type like this:
 
 `import {ComponentName} from './path/{componentName}';`
 
+### 0.4.2
+
+Added commands to create and open config file ".vscode/create-react-component.json"
+
 ### 0.4.1
 
 Added "addCSS = true" and "addConstructor = false" options in config file

@@ -2,7 +2,7 @@
 	"name": "create-react-component",
 	"displayName": "Create React component",
 	"description": "Create React component with index.js and CSS",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"publisher": "Escalion",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -13,18 +13,32 @@
 	"icon": "images/icon.png",
 	"activationEvents": [
 		"onCommand:create-react-component.create",
-		"onCommand:create-react-component.createhere"
+		"onCommand:create-react-component.createhere",
+		"onCommand:create-react-component.createdefaultconfig",
+		"onCommand:create-react-component.openconfig"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
+				"command": "create-react-component.openconfig",
+				"title": "Open config file",
+				"category": "Create React Component"
+			},
+			{
+				"command": "create-react-component.createdefaultconfig",
+				"title": "Create default config file",
+				"category": "Create React Component"
+			},
+			{
 				"command": "create-react-component.create",
-				"title": "Create React component in default directory"
+				"title": "Create React component in default directory",
+				"category": "Create React Component"
 			},
 			{
 				"command": "create-react-component.createhere",
-				"title": "Create React component Here"
+				"title": "Create React component Here",
+				"category": "Create React Component"
 			}
 		],
 		"menus": {

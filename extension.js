@@ -16,6 +16,7 @@ let defaultDir = 'src/components',
 	addCSS = true,
 	addConstructor = false;
 const projectDir = vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1];
+const VSCodeConfigFilePath = path.join(projectDir, `.vscode/create-react-component.json`);
 
 fs.readFile(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8', 
 function(err, contents) {
@@ -92,7 +93,9 @@ function createComponent(dir) {
  */
 function activate(context) {
 	const commandCreate = 'create-react-component.create',
-		  commandCreateHere = 'create-react-component.createhere';
+		  commandCreateHere = 'create-react-component.createhere',
+		  commandCreateDefaultConfig = 'create-react-component.createdefaultconfig',
+		  commandOpenConfig = 'create-react-component.openconfig';
 
 	const createDefault = () => {
 		let dir = path.join(projectDir, defaultDir);
@@ -114,11 +117,43 @@ function activate(context) {
 		createComponent(dir);
 	}
 
+	const createDefaultConfig = () => {
+		const contentConfig = `{\n	"defaultDir": "src/components",\n	"addCSS": true,\n	"addConstructor": false\n}`;
+
+		fs.mkdirSync(path.join(projectDir, `.vscode`), { recursive: true });
+
+		fs.writeFile(VSCodeConfigFilePath, contentConfig, err => {
+			if (err) {
+				return vscode.window.showErrorMessage(`Failed to create default config. Error: ${err}`);
+			}
+		});
+		let uri = vscode.Uri.file(VSCodeConfigFilePath);
+		vscode.commands.executeCommand('vscode.open', uri);
+		// vscode.commands.executeCommand('editor.action.addCommentLine');
+		// vscode.commands.executeCommand('open', path.join(projectDir, `.vscode/create-react-component.json`));
+	}
+
+	const openConfig = () => {
+		fs.exists(VSCodeConfigFilePath, (exists) => {
+			if (exists) {
+				let uri = vscode.Uri.file(VSCodeConfigFilePath);
+				vscode.commands.executeCommand('vscode.open', uri);
+			} else {
+				createDefaultConfig();
+			}
+		})
+	}
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commandOpenConfig, openConfig)
+	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand(commandCreate, createDefault)
 	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand(commandCreateHere, createHere)
+	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand(commandCreateDefaultConfig, createDefaultConfig)
 	);
 	
 	// The command has been defined in the package.json file
