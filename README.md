@@ -11,13 +11,19 @@ To use component you just need to type like this:
 
 `import {ComponentName} from './path/{componentName}';`
 
+### 0.4.3
+
+Now you can choose type of created component: 'class' or 'function'
+Added "componentType = 'class'" and "openAfterCreate = true" options in default config file
+Code optimizations
+
 ### 0.4.2
 
 Added commands to create and open config file ".vscode/create-react-component.json"
 
 ### 0.4.1
 
-Added "addCSS = true" and "addConstructor = false" options in config file
+Added "addCSS = true" and "addConstructor = false" options in default config file
 
 Some fixes
 

@@ -11,26 +11,28 @@ function firstSymbolIsLetter(str) {
 	return str[0].match(/[a-zA-Z]/i);
 }
 
-let json = null;
 let defaultDir = 'src/components',
 	addCSS = true,
-	addConstructor = false;
+	addConstructor = false,
+	componentType = 'class',
+	openAfterCreate = true;
+
 const projectDir = vscode.workspace.workspaceFolders[0].uri.path.toString().split(':')[1];
 const VSCodeConfigFilePath = path.join(projectDir, `.vscode/create-react-component.json`);
 
-fs.readFile(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8', 
-function(err, contents) {
-	if (err !== null) {
-		return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
-	} else {
-		jsonParse(JSON.parse(contents));
-	}					
-});
+function readConfig() {
+	jsonParse(
+		fs.readFileSync(path.join(projectDir, `.vscode/create-react-component.json`), 'utf8')
+	); 
+}
 
 function jsonParse(json) {
-	defaultDir = json.defaultDir || 'src/components';
-	addCSS = (json.addCSS != undefined) ? json.addCSS : true;
-	addConstructor = (json.addConstructor != undefined) ? json.addConstructor : false;
+	const config = JSON.parse(json);
+	defaultDir = config.defaultDir || 'src/components';
+	addCSS = (config.addCSS != undefined) ? config.addCSS : true;
+	addConstructor = (config.addConstructor != undefined) ? config.addConstructor : false;
+	componentType = (config.componentType == 'function') ? 'function' : 'class';
+	openAfterCreate = (config.openAfterCreate != undefined) ? config.openAfterCreate : true;
 }
 
 function createComponent(dir) {
@@ -41,7 +43,7 @@ function createComponent(dir) {
 		if (!firstSymbolIsLetter(input)) {
 			vscode.window.showErrorMessage(`Wrong component name. Component name must start with a letter`);
 		} else {
-
+			readConfig();
 			const splitedInput = input.toLowerCase().split(' ');
 			let componentName = '';
 			splitedInput.forEach(word => {
@@ -55,13 +57,17 @@ function createComponent(dir) {
 			
 			const contentIndex = 
 			`import ${componentName} from './${componentDirName}';\nexport default ${componentName};`;
-			const contentComponent = `import React, {Component} from 'react';\n\n${CSSCommand}export default class ${componentName} extends Component {\n${constructorCommand}	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`;
+			
+			const contentComponent = {
+				class: `import React, {Component} from 'react';\n\n${CSSCommand}export default class ${componentName} extends Component {\n${constructorCommand}	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`,
+				function: `import React, {Component} from 'react';\n\n${CSSCommand}function ${componentName} () {\n	return (\n		<>\n\n		</>\n	);\n}\n\nexport default ${componentName}`
+			}
 			
 			const componentPath = `${dir}\\${componentDirName}`;
 
 			fs.mkdirSync(componentPath, { recursive: true });
 
-			fs.writeFile(path.join(componentPath, `${componentDirName}.js`), contentComponent, err => {
+			fs.writeFile(path.join(componentPath, `${componentDirName}.js`), contentComponent[componentType], err => {
 				if (err) {
 					console.error(err);
 					return vscode.window.showErrorMessage(`Failed to create React component. Error: ${err}`);
@@ -84,6 +90,11 @@ function createComponent(dir) {
 			});
 			
 			vscode.window.showInformationMessage(`React component "${input}" created in ${componentPath}`);
+		
+			if (openAfterCreate) {
+				let uri = vscode.Uri.file(path.join(componentPath, `${componentDirName}.js`));
+				vscode.commands.executeCommand('vscode.open', uri);
+			}
 		}
 	});
 }
@@ -92,11 +103,6 @@ function createComponent(dir) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-	const commandCreate = 'create-react-component.create',
-		  commandCreateHere = 'create-react-component.createhere',
-		  commandCreateDefaultConfig = 'create-react-component.createdefaultconfig',
-		  commandOpenConfig = 'create-react-component.openconfig';
-
 	const createDefault = () => {
 		let dir = path.join(projectDir, defaultDir);
 		createComponent(dir);
@@ -112,13 +118,12 @@ function activate(context) {
 			}
 		} else {
 			return vscode.window.showErrorMessage(`Failed to create React component. Directory did't chosen`);
-			//dir = path.join(projectDir, defaultDir);
 		}
 		createComponent(dir);
 	}
 
 	const createDefaultConfig = () => {
-		const contentConfig = `{\n	"defaultDir": "src/components",\n	"addCSS": true,\n	"addConstructor": false\n}`;
+		const contentConfig = `{\n	"defaultDir": "src/components",\n	"componentType": "class",\n	"openAfterCreate": true\n	"addCSS": true,\n	"addConstructor": false\n}`;
 
 		fs.mkdirSync(path.join(projectDir, `.vscode`), { recursive: true });
 
@@ -129,8 +134,6 @@ function activate(context) {
 		});
 		let uri = vscode.Uri.file(VSCodeConfigFilePath);
 		vscode.commands.executeCommand('vscode.open', uri);
-		// vscode.commands.executeCommand('editor.action.addCommentLine');
-		// vscode.commands.executeCommand('open', path.join(projectDir, `.vscode/create-react-component.json`));
 	}
 
 	const openConfig = () => {
@@ -143,18 +146,17 @@ function activate(context) {
 			}
 		})
 	}
-	context.subscriptions.push(
-		vscode.commands.registerCommand(commandOpenConfig, openConfig)
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand(commandCreate, createDefault)
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand(commandCreateHere, createHere)
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand(commandCreateDefaultConfig, createDefaultConfig)
-	);
+
+	const commands = [
+		{ command: 'create', func: createDefault},
+		{ command: 'createhere', func: createHere},
+		{ command: 'createdefaultconfig', func: createDefaultConfig},
+		{ command: 'openconfig', func: openConfig}
+	];
+
+	commands.forEach((item) => {
+		vscode.commands.registerCommand(`create-react-component.${item.command}`, item.func)
+	})
 	
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
