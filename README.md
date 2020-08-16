@@ -14,7 +14,9 @@ To use component you just need to type like this:
 ### 0.4.3
 
 Now you can choose type of created component: 'class' or 'function'
+
 Added "componentType = 'class'" and "openAfterCreate = true" options in default config file
+
 Code optimizations
 
 ### 0.4.2
