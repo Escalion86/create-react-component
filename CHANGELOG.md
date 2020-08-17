@@ -2,7 +2,11 @@
 
 All notable changes to the "create-react-component" extension will be documented in this file.
 
-## [Unrelease]
+## [0.4.4] - 2020-08-17
+### Added
+- Russian language support
+- "language = 'en'" option in default config file (for Russian set to 'ru')
+
 ### Changed
 - Fixed created code for function type component
 - Fixed code for default config file

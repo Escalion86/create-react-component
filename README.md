@@ -1,4 +1,5 @@
 # Create React component
+![](https://img.shields.io/badge/release-v0.4.4-green)
 
 Create React component in chosen in explorer path or default directory
 
@@ -10,3 +11,4 @@ New component include (can configurate):
 To use component you just need to type like this:
 
 `import {ComponentName} from './path/{componentName}';`
+
