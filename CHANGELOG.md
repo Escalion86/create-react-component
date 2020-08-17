@@ -2,7 +2,7 @@
 
 All notable changes to the "create-react-component" extension will be documented in this file.
 
-[Unrelease]
+## [Unrelease]
 ### Changed
 - Fixed created code for function type component
 
