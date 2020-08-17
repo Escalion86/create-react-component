@@ -123,7 +123,7 @@ function activate(context) {
 	}
 
 	const createDefaultConfig = () => {
-		const contentConfig = `{\n	"defaultDir": "src/components",\n	"componentType": "class",\n	"openAfterCreate": true\n	"addCSS": true,\n	"addConstructor": false\n}`;
+		const contentConfig = `{\n	"defaultDir": "src/components",\n	"componentType": "class",\n	"openAfterCreate": true,\n	"addCSS": true,\n	"addConstructor": false\n}`;
 
 		fs.mkdirSync(path.join(projectDir, `.vscode`), { recursive: true });
 

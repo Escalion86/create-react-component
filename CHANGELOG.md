@@ -5,6 +5,7 @@ All notable changes to the "create-react-component" extension will be documented
 ## [Unrelease]
 ### Changed
 - Fixed created code for function type component
+- Fixed code for default config file
 
 ## [0.4.3] - 2020-08-17
 ### Added
