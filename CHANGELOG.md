@@ -2,6 +2,10 @@
 
 All notable changes to the "create-react-component" extension will be documented in this file.
 
+[Unrelease]
+### Changed
+- Fixed created code for function type component
+
 ## [0.4.3] - 2020-08-17
 ### Added
 - Now you can choose type of created component: 'class' or 'function'
@@ -43,7 +47,7 @@ All notable changes to the "create-react-component" extension will be documented
 
 ## [0.2.2] - 2020-08-06
 ### Changed
-- Fix default path from 'src/component/' to 'src/components/'
+- Fixed default path from 'src/component/' to 'src/components/'
 
 ## [0.2.1] - 2020-08-06
 ### Added

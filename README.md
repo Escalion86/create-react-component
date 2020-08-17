@@ -1,6 +1,6 @@
 # Create React component
 
- Create React component in chosen in explorer path or default directory
+Create React component in chosen in explorer path or default directory
 
 New component include (can configurate):
 - path \\ {componentName} \\ {componentName}.js (React file with import {componentName}.css)

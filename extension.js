@@ -60,7 +60,7 @@ function createComponent(dir) {
 			
 			const contentComponent = {
 				class: `import React, {Component} from 'react';\n\n${CSSCommand}export default class ${componentName} extends Component {\n${constructorCommand}	render() {\n		return (\n			<>\n\n			</>\n		)\n	}\n}`,
-				function: `import React, {Component} from 'react';\n\n${CSSCommand}function ${componentName} () {\n	return (\n		<>\n\n		</>\n	);\n}\n\nexport default ${componentName}`
+				function: `import React from 'react';\n\n${CSSCommand}function ${componentName} () {\n	return (\n		<>\n\n		</>\n	);\n}\n\nexport default ${componentName}`
 			}
 			
 			const componentPath = `${dir}\\${componentDirName}`;
