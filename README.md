@@ -1,5 +1,5 @@
 # Create React component
-![](https://img.shields.io/badge/release-v0.4.4-green)
+![](https://img.shields.io/badge/release-v0.5.0-green)
 
 Create React component in chosen in explorer path or default directory
 
@@ -10,5 +10,32 @@ New component include (can configurate):
 
 To use component you just need to type like this:
 
-`import {ComponentName} from './path/{componentName}';`
+```javascript
+import {ComponentName} from './path/{componentName}';
+```
+
+Default config looks like this:
+```javascript
+{
+	"defaultDir": "src/components",
+	"componentType": "class",
+	"openAfterCreate": true,
+	"addCSS": true,
+	"addConstructor": false,
+	"language": "en",
+	"componentNameStyle": {
+		"styleInExplorer": "camel",
+		"bigFirstLetterInExplorer": false,
+		"styleInCode": "camel",
+		"bigFirstLetterInCode": true
+	}
+}
+```
+Component styles can be: 
+                    
+``Style``  | `bigFirstLetter = true` | `bigFirstLetter = false`
+------------- | ------------- | -------------
+`camel`  | ReactComponentName | reactComponentName
+`snake`  | React_component_name | react_component_name
+`kebab`  | React-component-name | react-component-name
 

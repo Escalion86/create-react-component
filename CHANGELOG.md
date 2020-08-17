@@ -2,6 +2,14 @@
 
 All notable changes to the "create-react-component" extension will be documented in this file.
 
+## [0.5.0] - 2020-08-17
+### Added
+- Now you can edit component name style in explorer (files and directory names)
+- componentNameStyle option in default config file: "styleInExplorer: 'camel'", "bigFirstLetterInExplorer: false", "styleInCode: 'camel'", "bigFirstLetterInCode: true" 
+
+### Changed
+- Fixed load config issue
+
 ## [0.4.4] - 2020-08-17
 ### Added
 - Russian language support
