@@ -145,11 +145,7 @@ function createComponent(dir) {
 			vscode.window.showErrorMessage(wrongComponentNameError[language]);
 		} else {
 			const componentName = textStyle(input, componentNameStyle.styleInCode, componentNameStyle.bigFirstLetterInCode);
-			// const splitedInput = input.toLowerCase().split(' ');
-			// let componentName = '';
-			// splitedInput.forEach(word => {
-			// 	componentName += word[0].toUpperCase() + word.slice(1);
-			// });
+
 			const componentDirName = textStyle(input, componentNameStyle.styleInExplorer, componentNameStyle.bigFirstLetterInExplorer);
 
 			//const componentDirName = componentName[0].toLowerCase() + componentName.slice(1);
@@ -254,13 +250,11 @@ function activate(context) {
 	commands.forEach((item) => {
 		vscode.commands.registerCommand(`create-react-component.${item.command}`, item.func)
 	})
-	
 
 	// context.subscriptions.push(create);
 }
 exports.activate = activate;
 
-// this method is called when your extension is deactivated
 function deactivate() {}
 
 module.exports = {
