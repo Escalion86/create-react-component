@@ -2,6 +2,10 @@
 
 All notable changes to the "create-react-component" extension will be documented in this file.
 
+## [Unreleased]
+### Changed
+- Some code optimization and error protection
+
 ## [0.5.0] - 2020-08-17
 ### Added
 - Now you can edit component name style in explorer (files and directory names)

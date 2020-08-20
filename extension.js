@@ -164,7 +164,7 @@ function createComponent(dir) {
 				function: `import React from 'react';\n\n${CSSCommand}function ${componentName} () {\n	return (\n		<>\n\n		</>\n	);\n}\n\nexport default ${componentName}`
 			}
 			
-			const componentPath = `${dir}\\${componentDirName}`;
+			const componentPath = path.join(dir, componentDirName);
 
 			fs.mkdirSync(componentPath, { recursive: true });
 
